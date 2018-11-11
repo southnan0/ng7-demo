@@ -1,0 +1,37 @@
+<div style="background-color: #efefef6b">
+  <div>
+    查看退款单
+  </div>
+  <nz-card [nzBordered]="false" nzTitle="基本信息">
+    <p>退款单号:</p>
+    <p>订单编号:{{basicInfo.orderNo}}</p>
+    <p>状态:</p>
+    <p>来源:</p>
+    <p>退款总额:{{200 | money}}</p>
+    <p>申请人:</p>
+    <p>申请时间:{{basicInfo.time | date:"yyyy年MM月dd日"}}</p>
+    <p>退款原因:</p>
+  </nz-card>
+
+  <nz-card style="margin-top:20px" [nzBordered]="false" nzTitle="退款明细">
+    <nz-table>
+      <thead>
+      <tr>
+        <th>退款方式</th>
+        <th>第三方交易流水号</th>
+        <th>已付金额</th>
+        <th>实际退款金额</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="">
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      </tbody>
+    </nz-table>
+  </nz-card>
+</div>
+

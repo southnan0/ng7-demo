@@ -1,0 +1,34 @@
+<nz-table #basicTable [nzData]="dataSet">
+  <thead>
+  <tr>
+    <th>退款单号</th>
+    <th>订单编号</th>
+    <th>来源</th>
+    <th>退款总额</th>
+    <th>退款方式</th>
+    <th>状态</th>
+    <th>申请时间</th>
+    <th>申请人</th>
+    <th>操作</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let data of basicTable.data">
+    <td>{{data.name}}</td>
+    <td>{{data.orderNo}}</td>
+    <td>{{data.address}}</td>
+    <td>{{data.age}}</td>
+    <td>{{data.address}}</td>
+    <td>{{data.time | date:"yyyy年MM月dd日"}}</td>
+    <td>{{data.age}}</td>
+    <td>{{data.address}}</td>
+    <td>
+      <a routerLink="/financial-detail/{{data.time}}">查看</a>
+      <nz-divider nzType="vertical"></nz-divider>
+      <a (click)="showRefundConfirm()">执行退款</a>
+      <nz-divider nzType="vertical"></nz-divider>
+      <a (click)="showCancelConfirm()">取消</a>
+    </td>
+  </tr>
+  </tbody>
+</nz-table>
