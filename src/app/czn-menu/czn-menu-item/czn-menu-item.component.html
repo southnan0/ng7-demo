@@ -1,8 +1,5 @@
 <li class="czn-menu-item">
-  <a routerLink="{{link}}" *ngIf="link">
+  <a routerLink="{{link?link:'#'}}" [ngStyle]="{cursor:link?'':'none'}">
     <ng-content></ng-content>
   </a>
-  <div *ngIf="!link">
-    <ng-content></ng-content>
-  </div>
 </li>

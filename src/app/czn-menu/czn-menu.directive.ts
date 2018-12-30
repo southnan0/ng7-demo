@@ -1,7 +1,7 @@
 import { Directive } from '@angular/core';
 
 @Directive({
-  selector: '[appCznMenu]'
+  selector: '[czn-menu]'
 })
 export class CznMenuDirective {
 
