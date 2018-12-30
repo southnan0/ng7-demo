@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import {RouterModule} from '@angular/router';
 import { NgZorroAntdModule, NZ_I18N, zh_CN } from 'ng-zorro-antd';
+import { HttpClientModule }    from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { FinancialComponent } from './financial/financial.component';
@@ -23,6 +24,7 @@ import {CznMenuModule} from './czn-menu/czn-menu.module';
     RouterModule,
     BrowserModule,
     NgZorroAntdModule,
+    HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     CznMenuModule

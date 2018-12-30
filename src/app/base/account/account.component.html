@@ -1,0 +1,84 @@
+
+<div>
+  <button nz-button (click)="handleModalShow('addAccountVisible')">
+    <i nz-icon type="plus"></i>新建账号
+  </button>
+  <nz-table #basicTable [nzData]="accountList">
+    <thead>
+    <tr>
+      <th>登录账号</th>
+      <th>使用人姓名</th>
+      <th>使用人手机号</th>
+      <th>账号关联组织</th>
+      <th>账号状态</th>
+      <th>创建时间</th>
+      <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of accountList">
+      <td>{{item.loginName}}</td>
+      <td>{{item.userName}}</td>
+      <td>{{item.mobile}}</td>
+      <td>{{item.orgIds}}</td>
+      <td>{{item.status}}</td>
+      <td>{{item.createdTime}}</td>
+      <td>
+        <button nz-button (click)="showModal()">角色设置</button>
+        编辑信息
+        禁用
+        启用
+        删除
+      </td>
+    </tr>
+    </tbody>
+  </nz-table>
+  <nz-modal [(nzVisible)]="roleSettingVisible" nzTitle="角色设置"
+            (nzOnCancel)="handleCancel('roleSettingVisible')"
+            (nzOnOk)="handleOk('roleSettingVisible')">
+
+  </nz-modal>
+
+  <nz-modal [(nzVisible)]="addAccountVisible" nzTitle="新建账号"
+            (nzOnCancel)="handleCancel('addAccountVisible')"
+            (nzOnOk)="handleAddAccount()"
+  >
+    <form nz-form [formGroup]="validateForm">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>账号关联组织</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <nz-select formControlName="orgId">
+            <nz-option *ngFor="let item of orgList"
+                       [nzValue]="item.orgId"
+                       [nzLabel]="item.orgName">
+            </nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>登录账号名</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <input nz-input formControlName="loginName" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>登录密码</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <input nz-input type="password" formControlName="password" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>使用人姓名</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <input nz-input formControlName="userName" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>使用人手机号</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <input nz-input formControlName="mobile" />
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </nz-modal>
+</div>
