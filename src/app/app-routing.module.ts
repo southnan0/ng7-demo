@@ -2,8 +2,8 @@ import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
 import {CommonModule} from '@angular/common';
 
-import {FinancialComponent} from './financial/financial.component';
-import {FinancialDetailComponent} from './financial-detail/financial-detail.component';
+import {FinancialComponent} from './routes/financial/financial.component';
+import {FinancialDetailComponent} from './routes/financial-detail/financial-detail.component';
 
 const routes: Routes = [{
   path: 'financial',
@@ -13,13 +13,13 @@ const routes: Routes = [{
   component: FinancialDetailComponent
 }, {
   path: 'user',
-  loadChildren: './user/user.module#UserModule'
+  loadChildren: './routes/user/user.module#UserModule'
 }, {
   path: 'check-in',
-  loadChildren: './check-in/check-in.module#CheckInModule'
+  loadChildren: './routes/check-in/check-in.module#CheckInModule'
 }, {
   path: 'base',
-  loadChildren: './base/base.module#BaseModule'
+  loadChildren: './routes/base/base.module#BaseModule'
 }];
 
 @NgModule({

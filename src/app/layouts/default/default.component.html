@@ -1,0 +1,35 @@
+<nz-layout class="h100per">
+  <nz-header>
+    <div class="logo"></div>
+  </nz-header>
+  <nz-layout>
+    <nz-sider [nzWidth]="200" style="background:#fff">
+      <ul nz-menu [nzMode]="'inline'" class="h100per">
+        <li nz-submenu *ngFor="let item of menu" [nzOpen]="item.open">
+          <span title>
+            <i nz-icon type="{{item.icon}}"></i>{{item.text}}
+          </span>
+          <ul>
+            <li nz-menu-item
+                *ngFor="let child of item.children"
+                [routerLink]="child.link"
+                [nzSelected]="child.selected"
+            >
+              {{child.text}}
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </nz-sider>
+    <nz-layout>
+      <!--<nz-breadcrumb style="margin:16px 0;">-->
+        <!--<nz-breadcrumb-item></nz-breadcrumb-item>-->
+      <!--</nz-breadcrumb>-->
+      <div class="content-title">{{title}}</div>
+
+      <nz-content style="background:#fff; padding: 24px; margin: 0 24px; min-height: 280px;">
+        <router-outlet></router-outlet>
+      </nz-content>
+    </nz-layout>
+  </nz-layout>
+</nz-layout>

@@ -1,7 +1,6 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<ul czn-menu>
-  <app-czn-menu-item link="/financial">退款单列表</app-czn-menu-item>
-  <app-czn-menu-item link="/user/login">登录</app-czn-menu-item>
-  <app-czn-menu-item>入住单管理</app-czn-menu-item>
-</ul>
-<router-outlet></router-outlet>
+<div [ngSwitch]="layout" class="h100per">
+  <app-default *ngSwitchCase="'default'"></app-default>
+  <app-full *ngSwitchCase="'full'"></app-full>
+</div>
+

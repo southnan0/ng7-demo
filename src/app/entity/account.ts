@@ -8,6 +8,7 @@ export class Account {
   createdTime: number;
   createdBy: number;
   orgIds: string;
+  orgNames: string;
   roleIds: string;
   password: string;
 }

@@ -6,6 +6,7 @@ export class Organize {
   parentId: number;
   address: string;
   regionId: number;
+  regionName: string;
   longitude: number;
   latitude: number;
   memo: string;
@@ -13,4 +14,5 @@ export class Organize {
   isDeleted: number;
   createdTime: number;
   createdBy: number;
+  children?:any[];
 }
