@@ -1,0 +1,149 @@
+<div>
+  <div nz-row>
+    <button nz-button (click)="showModal()">
+      <i nz-icon type="plus"></i>新增组织
+    </button>
+  </div>
+  <br />
+  <div nz-row [nzGutter]="8">
+    <div nz-col [nzSpan]="12">
+      <nz-card nzTitle="组织列表" [nzLoading]="organizeService.loading.getOrgList > 0">
+        <nz-tree [nzData]="orgList" nzShowLine="true" (nzClick)="selectOrganize($event)"
+                 [nzDefaultExpandAll]="true"
+        ></nz-tree>
+      </nz-card>
+    </div>
+    <div nz-col [nzSpan]="12">
+      <nz-card nzTitle="组织详情" [nzLoading]="organizeService.loading.organize > 0">
+        <div *ngIf="selectedNote">
+          <p>组织名称：{{selectedNote.orgName}}</p>
+          <p>状态：{{selectedNote.status | transformStatus:orgStatusList}}</p>
+          <p>组织类型：{{selectedNote.orgType | transformStatus:orgTypeList}}</p>
+          <p>组织层级：{{selectedNote.level}}</p>
+          <p>四级地址：{{selectedNote.regionPathName}}</p>
+          <p>详细地址：{{selectedNote.address}}</p>
+          <p>经度：{{selectedNote.longitude}} 纬度：{{selectedNote.latitude}}</p>
+          <p>备注：{{selectedNote.memo}}</p>
+          <div class="right-btn">
+            <button nz-button nzType="primary" (click)="showModal(selectedNote)">编辑信息</button>
+            <button *ngIf="selectedNote.status === 1" nz-button nzType="default" nz-popconfirm nzTitle="确定禁用该组织？"
+                    (nzOnConfirm)="confirm(selectedNote)">禁用组织</button>
+            <button *ngIf="selectedNote.status === 2" nz-button nzType="default" nz-popconfirm nzTitle="确定启用该组织？"
+                    (nzOnConfirm)="confirm(selectedNote)">启用组织</button>
+          </div>
+
+        </div>
+      </nz-card>
+    </div>
+  </div>
+
+  <nz-modal [(nzVisible)]="addOrganizeVisible" nzTitle="{{isEdit?'编辑':'新建'}}组织"
+            (nzOnCancel)="handleCancel('addOrganizeVisible')"
+            (nzOnOk)="handleAddOrganize()"
+  >
+    <form nz-form [formGroup]="validateForm" *ngIf="addOrganizeVisible">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>新增组织类型</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <nz-select formControlName="orgType" nzDisabled="{{isEdit}}">
+            <nz-option *ngFor="let item of orgTypeList"
+                       [nzValue]="item.value"
+                       [nzLabel]="item.label">
+            </nz-option>
+          </nz-select>
+          <nz-form-explain *ngIf="validateForm.get('orgType').dirty && validateForm.get('orgType').errors">
+            <ng-container *ngIf="validateForm.get('orgType').hasError('required')">
+              请选择组织类型
+            </ng-container>
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>上级组织</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <nz-tree-select formControlName="parentId"
+                          [nzNodes]="orgList"
+                          nzShowSearch
+                          [nzDefaultExpandAll]="true"
+                          nzDisabled="{{isEdit}}"
+          >
+          </nz-tree-select>
+          <nz-form-explain *ngIf="validateForm.get('parentId').dirty && validateForm.get('parentId').errors">
+            <ng-container *ngIf="validateForm.get('parentId').hasError('required')">
+              请选择上级组织
+            </ng-container>
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>新建组织名称</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <input nz-input formControlName="orgName"/>
+          <nz-form-explain *ngIf="validateForm.get('orgName').dirty && validateForm.get('orgName').errors">
+            <ng-container *ngIf="validateForm.get('orgName').hasError('required')">
+              请输入组织名称
+            </ng-container>
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>四级地址</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <nz-cascader formControlName="regionPathId"
+                       [nzOptions]="regionList"
+                       [nzLoadData]="getNextLevel.bind(this)"
+                       nzLabelProperty="regionName"
+                       nzValueProperty="regionId"
+          >
+
+          </nz-cascader>
+          <nz-form-explain *ngIf="validateForm.get('regionPathId').dirty && validateForm.get('regionPathId').errors">
+            <ng-container *ngIf="validateForm.get('regionPathId').hasError('required')">
+              请选择四级地址
+            </ng-container>
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>详细地址</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <textarea nz-input formControlName="address"></textarea>
+          <nz-form-explain *ngIf="validateForm.get('address').dirty && validateForm.get('address').errors">
+            <ng-container *ngIf="validateForm.get('address').hasError('required')">
+              请输入详细地址
+            </ng-container>
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>经度</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <input nz-input formControlName="longitude"/>
+          <nz-form-explain *ngIf="validateForm.get('longitude').dirty && validateForm.get('longitude').errors">
+            <ng-container *ngIf="validateForm.get('longitude').hasError('required')">
+              请输入经度
+            </ng-container>
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>纬度</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <input nz-input formControlName="latitude"/>
+          <nz-form-explain *ngIf="validateForm.get('latitude').dirty && validateForm.get('latitude').errors">
+            <ng-container *ngIf="validateForm.get('latitude').hasError('required')">
+              请输入纬度
+            </ng-container>
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7">备注</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <textarea nz-input formControlName="memo"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </nz-modal>
+
+</div>

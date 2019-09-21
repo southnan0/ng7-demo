@@ -5,13 +5,17 @@ import { NgZorroAntdModule, NZ_I18N, zh_CN } from 'ng-zorro-antd';
 import { HttpClientModule }    from '@angular/common/http';
 
 import { AppComponent } from './app.component';
-import { FinancialComponent } from './financial/financial.component';
+import { FinancialComponent } from './routes/financial/financial.component';
 import { AppRoutingModule } from './app-routing.module';
-import { FinancialDetailComponent } from './financial-detail/financial-detail.component';
+import { FinancialDetailComponent } from './routes/financial-detail/financial-detail.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { MoneyPipe } from './money.pipe';
+import { MoneyPipe } from './pipes/money.pipe';
 
-import {CznMenuModule} from './czn-menu/czn-menu.module';
+import {CznMenuModule} from './components/czn-menu/czn-menu.module';
+import {httpInterceptorProviders} from "./http-interceptors";
+
+import {DefaultComponent} from "./layouts/default/default.component";
+import { FullComponent } from './layouts/full/full.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +23,8 @@ import {CznMenuModule} from './czn-menu/czn-menu.module';
     FinancialComponent,
     FinancialDetailComponent,
     MoneyPipe,
+    DefaultComponent,
+    FullComponent,
   ],
   imports: [
     RouterModule,
@@ -29,7 +35,7 @@ import {CznMenuModule} from './czn-menu/czn-menu.module';
     BrowserAnimationsModule,
     CznMenuModule
   ],
-  providers: [ { provide: NZ_I18N, useValue: zh_CN } ],
+  providers: [ { provide: NZ_I18N, useValue: zh_CN }, httpInterceptorProviders ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,0 +1,121 @@
+
+<div>
+  <div nz-row>
+    <button nz-button (click)="showModal('addAccountVisible')">
+      <i nz-icon type="plus"></i>新建账号
+    </button>
+  </div>
+
+  <br />
+  
+  <nz-table #basicTable [nzData]="accountList"
+            [nzLoading]="accountService.loading.getAccountList>0">
+    <thead>
+    <tr>
+      <th>登录账号</th>
+      <th>使用人姓名</th>
+      <th>使用人手机号</th>
+      <th>账号关联组织</th>
+      <th>账号状态</th>
+      <th>创建时间</th>
+      <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of accountList">
+      <td>{{item.loginName}}</td>
+      <td>{{item.userName}}</td>
+      <td>{{item.mobile}}</td>
+      <td>{{item.orgNames}}</td>
+      <td>{{item.status | transformStatus:accountStatusList}}</td>
+      <td>{{item.createdTime}}</td>
+      <td>
+        <button class="link-button" (click)="showModal('roleSettingVisible',item)">角色设置</button>
+        <button class="link-button" (click)="showModal('addAccountVisible',item)">编辑信息</button>
+        <button class="link-button" nz-popconfirm nzTitle="你确定禁用该账户吗？"
+                (nzOnConfirm)="handleDisableAccount(item)">
+          禁用
+        </button>
+        <button class="link-button" nz-popconfirm nzTitle="你确定启用该账户吗？"
+                (nzOnConfirm)="handleEnableAccount(item)">
+          启用
+        </button>
+        <button class="link-button" nz-popconfirm nzTitle="你确定删除该账户吗？"
+                (nzOnConfirm)="handleDeleteAccount(item)">
+          删除
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </nz-table>
+  <nz-modal [(nzVisible)]="roleSettingVisible" nzTitle="角色设置"
+            (nzOnCancel)="handleCancel('roleSettingVisible')"
+            (nzOnOk)="handleOk('roleSettingVisible')">
+
+  </nz-modal>
+
+  <nz-modal [(nzVisible)]="addAccountVisible" nzTitle="新建账号"
+            (nzOnCancel)="handleCancel('addAccountVisible')"
+            (nzOnOk)="handleAddAccount()"
+            [nzOkLoading]="accountService.loading.addAccount>0"
+  >
+    <form nz-form [formGroup]="validateForm"  *ngIf="addAccountVisible">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>账号关联组织</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <app-modal-organize formControlName="orgIds" [orgList]="orgList"></app-modal-organize>
+          <nz-form-explain *ngIf="validateForm.get('orgIds').dirty && validateForm.get('orgIds').errors">
+            <ng-container *ngIf="validateForm.get('orgIds').hasError('required')">
+              请选择账号关联组织
+            </ng-container>
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>登录账号名</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <input nz-input
+                 formControlName="loginName"
+                 [disabled]="isEdit"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>登录密码</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <input nz-input type="password"
+                 formControlName="password"
+                 [disabled]="isEdit"
+          />
+          <nz-form-explain *ngIf="validateForm.get('password').dirty && validateForm.get('password').errors">
+            <ng-container *ngIf="validateForm.get('password').hasError('required')">
+              请输入登录密码
+            </ng-container>
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>使用人姓名</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <input nz-input formControlName="userName"/>
+          <nz-form-explain *ngIf="validateForm.get('userName').dirty && validateForm.get('userName').errors">
+            <ng-container *ngIf="validateForm.get('userName').hasError('required')">
+              请输入使用人姓名
+            </ng-container>
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>使用人手机号</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+          <input nz-input formControlName="mobile"/>
+          <nz-form-explain *ngIf="validateForm.get('mobile').dirty && validateForm.get('mobile').errors">
+            <ng-container *ngIf="validateForm.get('mobile').hasError('required')">
+              请输入使用人手机号
+            </ng-container>
+          </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </nz-modal>
+</div>
